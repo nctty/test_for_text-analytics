@@ -1,0 +1,117 @@
+---
+title: "Untitled"
+author: "Group 27"
+date: "13/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = TRUE)
+# rm(list=ls())
+#library(ggplot2)
+#library(stringr)
+#library(tidytext)
+library(dplyr)
+library(tidyverse) # for read_csv
+library(tidytext)  # for unnest_tokens
+library(jsonlite)
+#library(FactoMineR)
+#library(tidyr)
+#library(topicmodels)
+```
+
+# brief dictionary
+reviewerID - ID of the reviewer, e.g. A2SUAM1J3GNN3B
+asin - ID of the product, e.g. 0000013714
+reviewerName - name of the reviewer
+helpful - helpfulness rating of the review, e.g. 2/3
+reviewText - text of the review
+overall - rating of the product
+summary - summary of the review
+unixReviewTime - time of the review (unix time)
+reviewTime - time of the review (raw)
+
+```{r loadthedata}
+
+apps_new_csv <- read_csv("meta_data_new.csv")
+
+amazon_reviews <- stream_in(
+    gzfile("reviews_Apps_for_Android_5.json.gz")
+)
+
+
+```
+Q1. What are the dominant words per star rating category?
+
+```{r}
+## merge first
+# combine main data & metadata
+All <- left_join(amazon_reviews, apps_new_csv)
+# how to seal with NA price? fill with 0 or delete it?
+
+str_squish(amazon_reviews$reviewText) # delete additional space
+bracketX(amazon_reviews$reviewText) #remove text within brackets.
+
+## cleaning and standardlize
+
+# tokenization
+Token <- All %>% unnest_tokens(word, reviewText)
+
+
+# stopword remove
+data("stop_words") # seminar 2
+Token <- Token %>% anti_join(stop_words) %>% count(word, sort = TRUE)
+
+dictionary
+mannually
+# (POS)
+# stemming
+dictionary
+# Lemmatization
+dictionary
+# typing errors
+check_spelling_interactive(Token$word) function
+qaq::function
+# word elongation whyyyyy why
+# contraction NLP natural 
+library(qdap)
+replace_contraction(Token$word) # lecture 2: shouldn't to should not
+text <- "She is Ms. not Mr.. "
+abbreviations
+
+abv <- c()
+repl <- c()
+replace_abbreviation(Token$word, abbreviations$abv, abbreviations$rep)
+
+text <- data.frame(text)
+replace_abbreviation(text, abbreviations$abv, abbreviations$rep)
+
+# symbols, number and time
+replace_symbol(Token$word) # Lecture 2
+replace_number(Token$word) # 2 becomes two Lecture 2
+
+
+# domain specific stopwords manually
+
+plot(freq_terms(amazon_reviews1))
+
+# part a
+# q1 use overall & word & total n
+# q2 ngrams seminar3
+# q3 use q1 & q2 and overall ralationship\
+
+##summarize
+
+##part b
+#white space handling
+
+
+##c
+amazon_reviews$reviewText
+
+#Good USA company
+#warranty
+
+
+
+```
